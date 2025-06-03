@@ -23,6 +23,10 @@ end
 
 $install_cicd = <<-SHELL
 
+echo '======== [0] 유틸리티 설치 ========'
+yum install -y wget unzip git yum-utils
+
+
 echo '======== [1] Rocky Linux 기본 설정 ========'
 echo '======== [1-1] 패키지 업데이트 ========'
 # 강의와 동일한 실습 환경을 유지하기 위해 Linux Update 주석 처리
