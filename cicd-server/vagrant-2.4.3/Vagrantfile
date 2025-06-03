@@ -23,8 +23,7 @@ end
 
 $install_cicd = <<-SHELL
 
-echo '======== [0] 유틸리티 설치 ========'
-yum install -y wget unzip git yum-utils
+
 
 
 echo '======== [1] Rocky Linux 기본 설정 ========'
@@ -85,6 +84,9 @@ source /etc/profile
 
 echo '======== [5] Git 설치 ========'
 yum install -y git
+
+echo '======== [6-0] 유틸리티 설치 ========'
+yum install -y wget unzip git yum-utils
 
 echo '======== [6] Jenkins 설치 ========'
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
