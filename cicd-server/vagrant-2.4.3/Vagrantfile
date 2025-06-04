@@ -71,7 +71,11 @@ yum install -y docker-ce-3:23.0.6-1.el8 docker-ce-cli-1:23.0.6-1.el8 containerd.
 systemctl daemon-reload
 systemctl enable --now docker
 
-echo '======== [4] Go 언어 설치 ========'
+echo '======== [4] OpenJDK 설치  ========'
+# yum list --showduplicates java-17-openjdk
+yum install -y java-17-openjdk
+
+echo '======== [5] Go 언어 설치 ========'
 GO_VERSION=1.22.2
 wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz -P /tmp
 rm -rf /usr/local/go
@@ -82,13 +86,13 @@ echo 'export PATH=$PATH:$GOPATH/bin' >> /etc/profile
 mkdir -p /root/go
 source /etc/profile
 
-echo '======== [5] Git 설치 ========'
+echo '======== [6] Git 설치 ========'
 yum install -y git
 
-echo '======== [6-0] 유틸리티 설치 ========'
+echo '======== [7-0] 유틸리티 설치 ========'
 yum install -y wget unzip git yum-utils
 
-echo '======== [6] Jenkins 설치 ========'
+echo '======== [7] Jenkins 설치 ========'
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 yum install -y jenkins-2.440.3-1.1
