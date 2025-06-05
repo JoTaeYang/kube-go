@@ -86,6 +86,16 @@ echo 'export PATH=$PATH:$GOPATH/bin' >> /etc/profile
 mkdir -p /root/go
 source /etc/profile
 
+# Jenkins 전용 설정
+echo 'export PATH=$PATH:/usr/local/go/bin' >> /var/lib/jenkins/.bashrc
+echo 'export GOPATH=/var/lib/jenkins/go' >> /var/lib/jenkins/.bashrc
+echo 'export PATH=$PATH:$GOPATH/bin' >> /var/lib/jenkins/.bashrc
+mkdir -p /var/lib/jenkins/go
+chown -R jenkins:jenkins /var/lib/jenkins/go
+
+# systemd 환경 설정
+echo 'PATH="/usr/local/go/bin:$PATH"' >> /etc/default/jenkins
+
 echo '======== [6] Git 설치 ========'
 yum install -y git
 
