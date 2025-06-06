@@ -87,8 +87,8 @@ pipeline {
                 script {
                     returnValue = input message: 'Blue 롤백?', parameters: [choice(choices: ['done', 'rollback'], name: 'IS_ROLLBACk')]
                     if (returnValue == "done") {
-                        sh "kubectl delete -f ./${CLASS_NUM}/2213/deploy/k8s/blue/deployment.yaml"
-                        sh "kubectl delete -f ./${CLASS_NUM}/2213/deploy/k8s/green/service.yaml"
+                        sh "kubectl delete -f ./${CLASS_NUM}/2213/deploy/blue/deployment.yaml"
+                        sh "kubectl delete -f ./${CLASS_NUM}/2213/deploy/green/service.yaml"
                         sh "kubectl patch -n anotherclass-221 svc api-tester -p '{\"metadata\": {\"labels\": {\"version\": \"2.0.0\"}}}'"
                         sh "kubectl patch -n anotherclass-221 cm api-tester-properties -p '{\"metadata\": {\"labels\": {\"version\": \"2.0.0\"}}}'"
                         sh "kubectl patch -n anotherclass-221 secret api-tester-postgresql -p '{\"metadata\": {\"labels\": {\"version\": \"2.0.0\"}}}'"
