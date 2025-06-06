@@ -42,13 +42,6 @@ pipeline {
             }
         }
 
-        stage('컨테이너 업로드') {
-            steps {
-                // DockerHub로 이미지 업로드
-                // 항상 본인의 Docker Hub에서 빌드가 되도록 수정 됨
-                sh "docker push ${DOCKERHUB_USERNAME}/test-server:latest"
-            }
-        }
 
         stage('쿠버네티스 blue 배포') {
             steps {

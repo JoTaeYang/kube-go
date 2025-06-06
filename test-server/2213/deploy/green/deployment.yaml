@@ -44,19 +44,19 @@ spec:
                 name: api-tester-properties
           startupProbe:
             httpGet:
-              path: "/startup"
+              path: "/start"
               port: 8080
             periodSeconds: 5
             failureThreshold: 24
           readinessProbe:
             httpGet:
-              path: "/readiness"
+              path: "/read"
               port: 8080
             periodSeconds: 10
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: "/liveness"
+              path: "/live"
               port: 8080
             periodSeconds: 10
             failureThreshold: 3
