@@ -16,7 +16,6 @@ spec:
       part-of: k8s-anotherclass
       component: backend-server
       name: api-tester
-      instance: api-tester
   replicas: 2
   strategy:
     type: RollingUpdate
@@ -26,7 +25,6 @@ spec:
         part-of: k8s-anotherclass
         component: backend-server
         name: api-tester
-        instance: api-tester
         version: 2.0.0
         blue-green-no: "2"
     spec:

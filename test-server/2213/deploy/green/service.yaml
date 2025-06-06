@@ -7,7 +7,6 @@ metadata:
     part-of: k8s-anotherclass
     component: backend-server
     name: api-tester
-    instance: api-tester
     version: 2.0.0
     managed-by: kubectl
 spec:
@@ -19,5 +18,5 @@ spec:
   ports:
     - port: 80
       targetPort: http
-      nodePort: 32213
+      nodePort: 32223
   type: NodePort
