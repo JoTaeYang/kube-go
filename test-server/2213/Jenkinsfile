@@ -66,8 +66,8 @@ pipeline {
 
         stage('쿠버네티스 Green배포') {
             steps {
-	        	sh "kubectl apply -f ./${CLASS_NUM}/2213/deploy/k8s/green/deployment.yaml"
-                sh "kubectl apply -f ./${CLASS_NUM}/2213/deploy/k8s/green/service.yaml"
+	        	sh "kubectl apply -f ./${CLASS_NUM}/2213/deploy/green/deployment.yaml"
+                sh "kubectl apply -f ./${CLASS_NUM}/2213/deploy/green/service.yaml"
             }
         }
 
