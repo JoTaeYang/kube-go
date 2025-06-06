@@ -71,7 +71,7 @@ pipeline {
                 sh '''
                  cd test-server
 
-                 docker build -t ${DOCKERHUB_USERNAME}/test-server:latest ./${CLASS_NUM}/build/docker
+                 docker build -t ${DOCKERHUB_USERNAME}/test-server:latest .
                 '''
             }
         }
