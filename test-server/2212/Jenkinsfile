@@ -1,11 +1,9 @@
 pipeline {
     agent any
-
+    
     tools {
-        gradle 'gradle-7.6.1'
-        jdk 'jdk-17'
+        go '1.22.2'
     }
-
     parameters {
         // DockerHub 사용자명 입력
         string(name: 'DOCKERHUB_USERNAME',  defaultValue: '', description: 'DockerHub 사용자명을 입력하세요.')
@@ -19,8 +17,8 @@ pipeline {
         // GITHUB_USERNAME = ""
 
         // 아래 부분 수정(x)
-        GITHUB_URL = "https://github.com/${GITHUB_USERNAME}/kubernetes-anotherclass-sprint2.git"
-        CLASS_NUM = '2212'
+        GITHUB_URL = "https://github.com/${GITHUB_USERNAME}/kube-go.git"
+        CLASS_NUM = 'test-server'
     }
     
     stages {
@@ -38,15 +36,24 @@ pipeline {
         stage('소스파일 체크아웃') {
             steps {
                 // 소스코드를 가져올 Github 주소
-                git branch: 'main', url: 'https://github.com/k8s-1pro/kubernetes-anotherclass-api-tester.git'
+                git branch: 'main', url: 'https://github.com/JoTaeYang/kube-go.git'
             }
         }
 
         stage('소스 빌드') {
             steps {
-                // 755권한 필요 (윈도우에서 Git으로 소스 업로드시 권한은 644)
-                sh "chmod +x ./gradlew"
-                sh "gradle clean build"
+                sh '''
+                    export GOCACHE=$WORKSPACE/.cache/go-build
+                    export GOMODCACHE=$WORKSPACE/.cache/go-mod
+                    export GOTMPDIR=$WORKSPACE/.tmp
+
+                    mkdir -p $GOCACHE $GOMODCACHE $GOTMPDIR
+
+                    cd test-server
+                    go version
+                    go mod tidy
+                    go build -o server
+                '''
             }
         }
 
@@ -61,11 +68,11 @@ pipeline {
 
         stage('컨테이너 빌드') {
             steps {
-                // jar 파일 복사
-                sh "cp ./build/libs/app-0.0.1-SNAPSHOT.jar ./${CLASS_NUM}/build/docker/app-0.0.1-SNAPSHOT.jar"
+                sh '''
+                 cd test-server
 
-                // 도커 빌드
-                sh "docker build -t ${DOCKERHUB_USERNAME}/api-tester:v1.0.0 ./${CLASS_NUM}/build/docker"
+                 docker build -t ${DOCKERHUB_USERNAME}/test-server:latest ./${CLASS_NUM}/build/docker
+                '''
             }
         }
 
@@ -73,18 +80,22 @@ pipeline {
             steps {
                 // DockerHub로 이미지 업로드
                 // 항상 본인의 Docker Hub에서 빌드가 되도록 수정 됨
-                sh "docker push ${DOCKERHUB_USERNAME}/api-tester:v1.0.0"
+                sh "docker push ${DOCKERHUB_USERNAME}/test-server:latest"
             }
         }
 
         stage('쿠버네티스 배포') {
             steps {
                 // K8S 배포
-                sh "kubectl apply -f ./${CLASS_NUM}/deploy/k8s/namespace.yaml"
-                sh "kubectl apply -f ./${CLASS_NUM}/deploy/k8s/configmap.yaml"
-                sh "kubectl apply -f ./${CLASS_NUM}/deploy/k8s/secret.yaml"
-                sh "kubectl apply -f ./${CLASS_NUM}/deploy/k8s/service.yaml"
-                sh "kubectl apply -f ./${CLASS_NUM}/deploy/k8s/deployment.yaml"
+                sh '''
+                    cd test-server/2212/deploy/k8s
+                    
+                    kubectl apply -f namespace.yaml
+                    kubectl apply -f configmap.yaml
+                    kubectl apply -f secret.yaml
+                    kubectl apply -f service.yaml
+                    kubectl apply -f deployment.yaml
+                '''
             }
         }
 
